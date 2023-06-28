@@ -1,0 +1,20 @@
+<!-- Sysmon Filter for identifying 4625 Security Events -->
+
+<Sysmon schemaversion="4.50">
+  <EventFiltering>
+    <RuleGroup name="LogonFailureEvents" groupRelation="or">
+      <ProcessCreate onmatch="exclude" />
+      <NetworkConnect onmatch="exclude" />
+      <ImageLoad onmatch="exclude" />
+      <EventIDFiltering>
+        <EventID name="4625" onmatch="include" /> <!-- Failed logon attemp -->
+      </EventIDFiltering>
+      <Filtering>
+        <Equals>
+          <TargetUserSid>S-1-0-0</TargetUserSid> <!-- Anon SID Usage -->
+          <SubStatus>0x80090325</SubStatus> <!--Substatus for SEC_E_LOGON_DENIED"-->
+        </Equals>
+      </Filtering>
+    </RuleGroup>
+  </EventFiltering>
+</Sysmon>
